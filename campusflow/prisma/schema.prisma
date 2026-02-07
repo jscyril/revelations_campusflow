@@ -1,0 +1,113 @@
+// Prisma schema for CampusFlow
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Users & Roles
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  password      String
+  name          String
+  role          String    @default("STUDENT") // ADMIN, ORGANIZER, STUDENT
+  department    String?
+  xp            Int       @default(0)
+  level         Int       @default(1)
+  createdAt     DateTime  @default(now())
+  
+  organizedEvents  Event[]       @relation("Organizer")
+  registrations    Registration[]
+  checkIns         CheckIn[]
+  badges           UserBadge[]
+}
+
+// Events & Lifecycle
+model Event {
+  id          String      @id @default(cuid())
+  title       String
+  subtitle    String?
+  description String
+  category    String      @default("ACADEMIC") // ACADEMIC, SOCIAL, SPORTS, CLUB, HACKATHON
+  status      String      @default("DRAFT") // DRAFT, PUBLISHED, ONGOING, ARCHIVED
+  
+  date        DateTime
+  time        String
+  location    String
+  heroImage   String?
+  
+  slots       Int         @default(100)
+  entryFee    Float       @default(0)
+  
+  organizerId String
+  organizer   User        @relation("Organizer", fields: [organizerId], references: [id])
+  
+  theme       String?     // JSON string for theme configuration
+  modules     String?     // JSON string for enabled modules
+  
+  registrations Registration[]
+  checkIns      CheckIn[]
+  timeline      TimelineItem[]
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+// Participation
+model Registration {
+  id        String   @id @default(cuid())
+  userId    String
+  eventId   String
+  user      User     @relation(fields: [userId], references: [id])
+  event     Event    @relation(fields: [eventId], references: [id])
+  status    String   @default("REGISTERED") // REGISTERED, CHECKED_IN, CANCELLED
+  createdAt DateTime @default(now())
+  
+  @@unique([userId, eventId])
+}
+
+model CheckIn {
+  id        String   @id @default(cuid())
+  userId    String
+  eventId   String
+  user      User     @relation(fields: [userId], references: [id])
+  event     Event    @relation(fields: [eventId], references: [id])
+  timestamp DateTime @default(now())
+}
+
+// Timeline
+model TimelineItem {
+  id         String  @id @default(cuid())
+  eventId    String
+  event      Event   @relation(fields: [eventId], references: [id])
+  title      String
+  time       String
+  isActive   Boolean @default(false)
+  isComplete Boolean @default(false)
+  sortOrder  Int     @default(0)
+}
+
+// Badges
+model Badge {
+  id          String      @id @default(cuid())
+  name        String
+  icon        String
+  description String
+  xpReward    Int         @default(100)
+  users       UserBadge[]
+}
+
+model UserBadge {
+  userId    String
+  badgeId   String
+  user      User   @relation(fields: [userId], references: [id])
+  badge     Badge  @relation(fields: [badgeId], references: [id])
+  earnedAt  DateTime @default(now())
+  
+  @@id([userId, badgeId])
+}

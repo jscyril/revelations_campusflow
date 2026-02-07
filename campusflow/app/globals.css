@@ -1,0 +1,200 @@
+@import "tailwindcss";
+
+:root {
+  /* Dark theme colors - Stranger Things inspired */
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #111111;
+  --bg-card: #1a1a1a;
+  --bg-card-hover: #222222;
+  
+  --text-primary: #ffffff;
+  --text-secondary: #a0a0a0;
+  --text-muted: #666666;
+  
+  --accent-red: #e50914;
+  --accent-red-glow: #ff2d2d;
+  --accent-green: #22c55e;
+  --accent-yellow: #facc15;
+  --accent-blue: #3b82f6;
+  --accent-purple: #a855f7;
+  
+  --border-color: #2a2a2a;
+  --border-light: #333333;
+}
+
+@theme inline {
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Glow effects */
+.glow-red {
+  text-shadow: 0 0 10px var(--accent-red),
+               0 0 20px var(--accent-red),
+               0 0 40px var(--accent-red-glow),
+               0 0 80px var(--accent-red-glow);
+}
+
+.glow-subtle {
+  text-shadow: 0 0 10px rgba(229, 9, 20, 0.5),
+               0 0 20px rgba(229, 9, 20, 0.3);
+}
+
+/* Button styles */
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-red) 0%, #b91c1c 100%);
+  color: white;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(229, 9, 20, 0.4);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-light);
+  padding: 12px 28px;
+  border-radius: 50px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-secondary:hover {
+  background: var(--bg-card);
+  border-color: var(--text-muted);
+}
+
+/* Card styles */
+.event-card {
+  background: var(--bg-card);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+.event-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  border-color: var(--border-light);
+}
+
+/* Filter tab styles */
+.filter-tab {
+  padding: 10px 20px;
+  border-radius: 50px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+  background: transparent;
+  color: var(--text-secondary);
+}
+.filter-tab:hover {
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+.filter-tab.active {
+  background: var(--accent-red);
+  color: white;
+  border-color: var(--accent-red);
+}
+
+/* Christmas lights animation */
+@keyframes twinkle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.light {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  animation: twinkle 1.5s ease-in-out infinite;
+}
+
+.light-red { background: #e50914; box-shadow: 0 0 10px #e50914; }
+.light-green { background: #22c55e; box-shadow: 0 0 10px #22c55e; }
+.light-yellow { background: #facc15; box-shadow: 0 0 10px #facc15; }
+.light-blue { background: #3b82f6; box-shadow: 0 0 10px #3b82f6; }
+.light-purple { background: #a855f7; box-shadow: 0 0 10px #a855f7; }
+
+/* Badge styles */
+.badge {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+.badge-time {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+}
+.badge-status {
+  color: var(--accent-red);
+  font-size: 12px;
+}
+
+/* Floating action button */
+.fab {
+  position: fixed;
+  bottom: 100px;
+  right: 24px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--accent-red);
+  color: white;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(229, 9, 20, 0.5);
+  transition: all 0.3s ease;
+  z-index: 100;
+}
+.fab:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 30px rgba(229, 9, 20, 0.6);
+}
